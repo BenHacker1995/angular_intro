@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="vendors/angular.min.js"></script>
+    <script src="scripts/client.js"></script>
+    <title>NG Launchpad</title>
+</head>
+<body>
+    <div id="main" ng-app="myApp">
+        <div ng-controller="LaunchpadController as LC">
+            <div id="2-wayBind">
+                <input type="text" ng-model="testText">
+                <p>{{ testText }}</p>
+                <button ng-click="LC.testClick()">Click Me</button>
+            </div>
+            <hr>
+            <div id="movies">
+                <input type="text" placeholder="movie?" ng-model="LC.movieIn">
+                <button ng-click="LC.getMovie()">Add</button>
+                <ul>
+                    <li ng-repeat="movie in LC.movies" ng-click="LC.removeMe( $index )">{{ movie }}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
