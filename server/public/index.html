@@ -9,6 +9,7 @@
     <title>NG Launchpad</title>
 </head>
 <body>
+    <h1>NG Launchpad</h1>
     <div id="main" ng-app="myApp">
         <div ng-controller="LaunchpadController as LC">
             <div id="2-wayBind">
@@ -21,7 +22,7 @@
                 <input type="text" placeholder="movie?" ng-model="LC.movieIn">
                 <button ng-click="LC.getMovie()">Add</button>
                 <ul>
-                    <li ng-repeat="movie in LC.movies" ng-click="LC.removeMe( $index )">{{ movie }}</li>
+                    <li ng-repeat="movie in LC.movies" ng-click="LC.removeMe( $index )">{{ movie.id }} - {{ movie.title }}</li>
                 </ul>
             </div>
         </div>

@@ -1,22 +1,62 @@
 let myApp = angular.module( 'myApp', [] );
 
-myApp.controller( 'LaunchpadController', function() {
+myApp.controller( 'LaunchpadController', ['$http', function( $http ) {
     // use "vm" as the name in script
     let vm = this;
     vm.movies = [];
 
-    vm.testClick = function(){
+    // simple click event
+    vm.testClick = function() {
         console.log( 'test click' )
     };// end testClick
 
-    vm.getMovie = function(){
-        vm.movies.push( vm.movieIn );
-        console.log( 'your movies:', vm.movies );
+    // gets UI movie
+    vm.getMovie = function() {
+        let newMovie = {
+            title: vm.movieIn
+        }
+        // ajax POST call
+        $http({
+            method: 'POST',
+            url: '/movie',
+            data: newMovie
+        }).then( function( response ) {
+            console.log( 'Adding movie as', response );
+            vm.requestMovies();
+        }).catch( function( error ) {
+            console.log( 'Error on POST:', error );
+        });
         vm.movieIn = '';
     } // end getMovie
 
-    vm.removeMe = function( index ){
-        console.log( 'in removeMe', index );
-        vm.movies.splice( index, 1 );
+    vm.removeMe = function( index ) {
+        let movieToDelete = vm.movies[index];
+        $http({
+            method: 'DELETE',
+            url: `/movie?id=${movieToDelete.id}`
+        }).then( function( response ) {
+            console.log( 'Deleted movie ', movieToDelete );
+            vm.requestMovies();            
+        }).catch( function( error ) {
+            console.log( 'Error deleting movie: ', error );
+        })
     } // end removeMe
-}); //end Controller
+
+    // ajax get call
+    vm.requestMovies = function() {
+        $http({
+            method: 'GET',
+            url: '/movie'
+        }).then( function( response ) {
+            console.log( 'Got response from the server: ', response );
+            vm.movies = response.data;
+        }).catch( function( error ) {
+            console.log( 'Error on GET: ', error );
+        })
+    }
+
+    // Get movies when controller loads
+    console.log( 'LaunchpadController is created' );
+    vm.requestMovies();
+
+}]); //end Controller
